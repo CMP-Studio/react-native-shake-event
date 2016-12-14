@@ -28,7 +28,7 @@ RCT_EXPORT_MODULE();
 
 + (void)initialize
 {
-    RCTSwapInstanceMethods([UIWindow class], @selector(motionEnded:withEvent:), @selector(handleShakeEvent:withEvent:));
+    RCTSwapInstanceMethods([UIWindow class], @selector(motionBegan:withEvent:), @selector(handleShakeEvent:withEvent:));
 }
 
 - (instancetype)init
@@ -36,7 +36,7 @@ RCT_EXPORT_MODULE();
     if ((self = [super init])) {
         RCTLogInfo(@"RNShakeEvent: started in debug mode");
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(motionEnded:)
+                                                 selector:@selector(motionBegan:)
                                                      name:RCTShowDevMenuNotification
                                                    object:nil];
     }
@@ -49,6 +49,12 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)motionEnded:(NSNotification *)notification
+{
+    [_bridge.eventDispatcher sendDeviceEventWithName:@"ShakeEvent"
+                                                body:nil];
+}
+
+- (void)motionBegan:(NSNotification *)notification
 {
     [_bridge.eventDispatcher sendDeviceEventWithName:@"ShakeEvent"
                                                 body:nil];
@@ -68,7 +74,7 @@ RCT_EXPORT_MODULE();
 {
     if ((self = [super init])) {
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(motionEnded:)
+                                                 selector:@selector(motionBegan:)
                                                      name:RCTShowDevMenuNotification
                                                    object:nil];
     }
@@ -81,6 +87,12 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)motionEnded:(NSNotification *)notification
+{
+    [_bridge.eventDispatcher sendDeviceEventWithName:@"ShakeEvent"
+                                                body:nil];
+}
+
+- (void)motionBegan:(NSNotification *)notification
 {
     [_bridge.eventDispatcher sendDeviceEventWithName:@"ShakeEvent"
                                                 body:nil];
